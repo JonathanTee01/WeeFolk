@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PlantBaseClass.generated.h"
+#include "AnimalParent.generated.h"
 
 UCLASS()
-class WEEFOLK_API APlantBaseClass : public AActor
+class WEEFOLK_API AAnimalParent : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	APlantBaseClass();
+	AAnimalParent();
 
 protected:
 	// Called when the game starts or when spawned

@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PlantBaseClass.h"
+#include "Animals/AnimalParent.h"
 
 // Sets default values
-APlantBaseClass::APlantBaseClass()
+AAnimalParent::AAnimalParent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,14 +12,14 @@ APlantBaseClass::APlantBaseClass()
 }
 
 // Called when the game starts or when spawned
-void APlantBaseClass::BeginPlay()
+void AAnimalParent::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void APlantBaseClass::Tick(float DeltaTime)
+void AAnimalParent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
