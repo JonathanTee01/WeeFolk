@@ -25,3 +25,7 @@ void AAnimalParent::Tick(float DeltaTime)
 
 }
 
+void AAnimalParent::FindFood(bool& FoundFood)
+{
+}
+
