@@ -32,6 +32,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
 	int32 MiniumCyclesPerSpread;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
+	int32 PointsAwardedPerGrowth;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Food")
+	int32 RequiredSoilLevel;
+
 	int32 cycleCounter;
 
 	// Functions
@@ -42,8 +48,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Variables
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Basic")
 	UStaticMesh* VisualComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basic")
+	FString Name;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Food")
+	int32 SatietyWhenEaten;
 
 	// Functions
 	UFUNCTION(BlueprintCallable, Category = "Timers")
