@@ -6,8 +6,20 @@
 #include "GameFramework/Actor.h"
 #include "PlantParent.generated.h"
 
+class WEEFOLK_API AEater
+{
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Food")
+	int32 RequiredSoilLevel;
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Food")
+	int32 SatietyWhenEaten;
+};
+
+
 UCLASS()
-class WEEFOLK_API APlantParent : public AActor
+class WEEFOLK_API APlantParent : public AActor, public AEater
 {
 	GENERATED_BODY()
 	
@@ -35,9 +47,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
 	int32 PointsAwardedPerGrowth;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Food")
-	int32 RequiredSoilLevel;
-
 	int32 cycleCounter;
 
 	// Functions
@@ -53,9 +62,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basic")
 	FString Name;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Food")
-	int32 SatietyWhenEaten;
 
 	// Functions
 	UFUNCTION(BlueprintCallable, Category = "Timers")
