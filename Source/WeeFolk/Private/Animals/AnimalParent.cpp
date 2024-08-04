@@ -29,3 +29,7 @@ void AAnimalParent::FindFood(bool& FoundFood)
 {
 }
 
+void AAnimalParent::Eat()
+{
+}
+
