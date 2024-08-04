@@ -19,45 +19,43 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Variables
+	// Timer to increment to track growth cycle
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
 	float GrowthTimer;
 
+	// Length of a growth cycle
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timers")
 	float GrowthCycleLength;
 
+	// Bool to track whether the plant has grown
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timers")
 	bool isFullyGrown;
 
+	// Number of cycles required before a plant can try to spread
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
 	int32 MiniumCyclesPerSpread;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
-	int32 PointsAwardedPerGrowth;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Food")
-	int32 RequiredSoilLevel;
-
+	// Counter for number of cycles passed since last growth/spread
 	int32 cycleCounter;
 
-	// Functions
+	// Non-blueprinted function to grow the plant
 	void Growth();
+
+	// Function to spread a plant to adjacent spaces
+	virtual void Spread();
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Variables
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Basic")
+	// StaticMesh for the plant to use
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
 	UStaticMesh* VisualComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basic")
-	FString Name;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Food")
-	int32 SatietyWhenEaten;
-
-	// Functions
+	/**Increments the timer tracking growth
+	* @param DeltaTime The time passed since last incremented
+	* @param timer The GrowthTimer's value after being updated
+	*/
 	UFUNCTION(BlueprintCallable, Category = "Timers")
 	void IncrementGrowthTimer(const float DeltaTime, float& timer);
 };

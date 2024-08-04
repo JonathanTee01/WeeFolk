@@ -45,3 +45,7 @@ void APlantParent::Growth()
 
 	// TODO : Add if for spreading
 }
+
+void APlantParent::Spread()
+{
+}
