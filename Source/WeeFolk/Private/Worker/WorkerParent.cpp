@@ -11,6 +11,10 @@ AWorkerParent::AWorkerParent()
 
 }
 
+void AWorkerParent::FindWork(AActor*& FoundWorkplace)
+{
+}
+
 // Called when the game starts or when spawned
 void AWorkerParent::BeginPlay()
 {
