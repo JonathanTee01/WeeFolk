@@ -16,6 +16,38 @@ public:
 	ACamera();
 
 protected:
+	// Boolean to track whether right mouse is held
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ButtonTracking")
+	bool RClick_Held;
+
+	// Boolean to track whether middle mouse is held
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ButtonTracking")
+	bool MClick_Held;
+
+	// Float of the rotation around Y axis
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Rotations")
+	float YRot_Value;
+
+	// Float of the rotation around Z axis
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Rotations")
+	float ZRot_Value;
+
+	// Rotator of forward used for panning relevant to Z rotation
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Rotations")
+	FRotator ZForward;
+
+	// Int value of forward axis
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Rotations")
+	int32 Forward_Axis;
+
+	// Int value of right axis
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Rotations")
+	int32 Right_Axis;
+
+	// Int value of rotation change
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Rotations")
+	int32 Rot_Change;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
