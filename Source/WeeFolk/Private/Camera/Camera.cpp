@@ -18,6 +18,28 @@ void ACamera::BeginPlay()
 	
 }
 
+void ACamera::PointAndClick(FHitResult& HitResult)
+{
+	// Variables
+	FHitResult HitResult(ForceInit);
+	FVector2D mousePos = FVector2D(0, 0);
+	FVector worldPos = FVector(mousePos.X, mousePos.Y, 0);
+	FVector dir = FVector(0, 0, 0);
+
+	/** Set Variables to Positions **/
+	GetMousePosition(mousePos.X, mousePos.Y);
+	DeprojectMousePositionToWorld(worldPos, dir);
+
+	FVector Start = worldPos;
+	FVector End = Start + dir * 10000;
+
+	/** Init Trace Params **/
+	FCollisionQueryParams TraceParams(FName(TEXT("TestTrace")), true, GetPawn());
+	TraceParams.bTraceComplex = false;
+	TraceParams.bTraceAsyncScene = false;
+	TraceParams.bReturnPhysicalMaterial = false;
+}
+
 // Called every frame
 void ACamera::Tick(float DeltaTime)
 {

@@ -51,6 +51,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Poink and click functionality with mouse
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void PointAndClick(FHitResult& HitResult);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
