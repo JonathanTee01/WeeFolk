@@ -22,6 +22,10 @@
 			]
 		},
 		{
+			"Name": "ActorSequence",
+			"Enabled": false
+		},
+		{
 			"Name": "Landmass",
 			"Enabled": true
 		}
