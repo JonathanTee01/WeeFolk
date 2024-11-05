@@ -25,7 +25,7 @@ protected:
 
 	// Length of a growth cycle
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timers")
-	float GrowthCycleLength;
+	float GrowthCycleLength = 10;
 
 	// Bool to track whether the plant has grown
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timers")
@@ -35,12 +35,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
 	int32 MiniumCyclesPerSpread;
 
-	// Bool to track growth of plant
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timers")
-	bool isGrown = false;
+	// StaticMesh for the plant to use
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
+	UStaticMeshComponent* VisualComponent;
 
 	// Float of current actor scale
-	float currentScale = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
+	float currentScale;
 
 	// Counter for number of cycles passed since last growth/spread
 	int32 cycleCounter;
@@ -54,10 +55,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// StaticMesh for the plant to use
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
-	UStaticMeshComponent* VisualComponent;
 
 	/**Increments the timer tracking growth
 	* @param DeltaTime The time passed since last incremented

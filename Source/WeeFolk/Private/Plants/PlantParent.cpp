@@ -8,7 +8,16 @@ APlantParent::APlantParent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	VisualComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Default Mesh"));
 
+	if (VisualComponent)
+	{
+		SetRootComponent(VisualComponent);
+	}
+
+	currentScale = 0;
+	isFullyGrown = false;
 }
 
 // Called when the game starts or when spawned
@@ -32,10 +41,10 @@ void APlantParent::IncrementGrowthTimer(const float deltaTime, float& timer)
 	timer = GrowthTimer;
 
 	// If not fully grown
-	if (!isGrown)
+	if (!isFullyGrown)
 	{
 		currentScale += deltaTime / GrowthCycleLength;
-		VisualComponent->SetWorldScale3D(FVector(currentScale, currentScale, currentScale));
+		VisualComponent->SetRelativeScale3D(FVector(currentScale, currentScale, currentScale));
 	}
 
 	// If due growth grow
@@ -52,7 +61,7 @@ void APlantParent::Growth()
 	cycleCounter++;
 
 	// Set isGrown to be true
-	isGrown = true;
+	isFullyGrown = true;
 
 	// TODO : Add if for spreading
 }
