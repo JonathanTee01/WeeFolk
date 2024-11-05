@@ -25,11 +25,18 @@ void APlantParent::Tick(float DeltaTime)
 
 }
 
-void APlantParent::IncrementGrowthTimer(const float DeltaTime, float& timer)
+void APlantParent::IncrementGrowthTimer(const float deltaTime, float& timer)
 {
 	// Incremtent the timer and output new value
-	GrowthTimer += DeltaTime;
+	GrowthTimer += deltaTime;
 	timer = GrowthTimer;
+
+	// If not fully grown
+	if (!isGrown)
+	{
+		currentScale += deltaTime / GrowthCycleLength;
+		VisualComponent->SetWorldScale3D(FVector(currentScale, currentScale, currentScale));
+	}
 
 	// If due growth grow
 	if (GrowthTimer >= GrowthCycleLength)
@@ -40,8 +47,12 @@ void APlantParent::Growth()
 {
 	// TODO : Add if for using soil quality
 
+	// Reduce the growth timer and increment the number of cycles
 	GrowthTimer -= GrowthCycleLength;
 	cycleCounter++;
+
+	// Set isGrown to be true
+	isGrown = true;
 
 	// TODO : Add if for spreading
 }

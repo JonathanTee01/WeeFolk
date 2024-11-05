@@ -35,6 +35,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
 	int32 MiniumCyclesPerSpread;
 
+	// Bool to track growth of plant
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timers")
+	bool isGrown = false;
+
+	// Float of current actor scale
+	float currentScale = 0;
+
 	// Counter for number of cycles passed since last growth/spread
 	int32 cycleCounter;
 
@@ -50,7 +57,7 @@ public:
 
 	// StaticMesh for the plant to use
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
-	UStaticMesh* VisualComponent;
+	UStaticMeshComponent* VisualComponent;
 
 	/**Increments the timer tracking growth
 	* @param DeltaTime The time passed since last incremented
