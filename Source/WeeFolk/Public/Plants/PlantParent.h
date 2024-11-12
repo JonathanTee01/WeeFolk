@@ -19,43 +19,67 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	//////////
+	//GROWTH//
+	//////////
+	
 	// Timer to increment to track growth cycle
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Growth")
 	float GrowthTimer;
 
 	// Length of a growth cycle
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Growth", meta = (ClampMin = "0.0", UIMin = "0.0"))
-	float GrowthCycleLength = 10;
-
-	// Bool to scale in only Z
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Growth")
-	bool scaleOnlyInZ;
+	float GrowthCycleLength{ 10 };
 
 	// Bool to track whether the plant has grown
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Growth")
 	bool isFullyGrown;
 
+	// Non-blueprinted function to grow the plant
+	void Growth();
+
+	/////////
+	//SCALE//
+	/////////
+
+	// Values to scale between at max growth
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Scale", meta = (ClampMin = "0.1", UIMin = "0.0"))
+	FVector2f scaleBetween{ 1.0,1.0 };
+
+	// Bool to scale in only Z
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Scale")
+	bool scaleOnlyInZ;
+
+	// Float of current actor scale
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Scale")
+	float currentScale;
+
+	// Z offset of actor when placed
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement")
+	bool ZRotationEnabled{ true };
+
+	// Z offset of actor upon placement
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement")
+	float ZOffset;
+
+	// Tilt range on placement
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement", meta = (ClampMin = "0.0", UIMin="0.0"))
+	FVector2f tiltRange{ 0.0,0.0 };
+
+	//////////
+	//SPREAD//
+	//////////
+
 	// Number of cycles required before a plant can try to spread
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
 	int32 MiniumCyclesPerSpread;
 
 	// StaticMesh for the plant to use
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
 	UStaticMeshComponent* VisualComponent;
 
-	// Values to scale between at max growth
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Growth", meta = (ClampMin = "0.1", UIMin= "0.0"))
-	FVector2f scaleBetween;
-
-	// Float of current actor scale
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Growth")
-	float currentScale;
-
 	// Counter for number of cycles passed since last growth/spread
 	int32 cycleCounter;
-
-	// Non-blueprinted function to grow the plant
-	void Growth();
 
 	// Function to spread a plant to adjacent spaces
 	virtual void Spread();
