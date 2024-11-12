@@ -16,15 +16,29 @@ APlantParent::APlantParent()
 		SetRootComponent(VisualComponent);
 	}
 
-	currentScale = 0;
-	isFullyGrown = false;
+	
 }
 
 // Called when the game starts or when spawned
 void APlantParent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// Generate randome scale based on planet
+	scaleMultiplier = FMath::FRandRange(scaleBetween.X, scaleBetween.Y);
+
+	// If enabled find a Z rotation and apply it
+	if (ZRotationEnabled)
+	{
+		ZRotation = FMath::FRandRange(0.0, 360.0);
+		// TODO: APPLY ROTATION
+	}
+
+	// TODO: GENERATE AND APPLY TILT
+
+	// TODO: APPLY Z OFFSET
+
+	// TODO: IF SET INHERIT UP FROM LAND NORMAL
 }
 
 // Called every frame
@@ -32,6 +46,7 @@ void APlantParent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 }
 
 void APlantParent::IncrementGrowthTimer(const float deltaTime, float& timer)
@@ -43,7 +58,7 @@ void APlantParent::IncrementGrowthTimer(const float deltaTime, float& timer)
 	// If not fully grown
 	if (!isFullyGrown)
 	{
-		currentScale += deltaTime / GrowthCycleLength;
+		currentScale += (deltaTime / GrowthCycleLength) * scaleMultiplier;
 		VisualComponent->SetRelativeScale3D(FVector(currentScale, currentScale, currentScale));
 	}
 

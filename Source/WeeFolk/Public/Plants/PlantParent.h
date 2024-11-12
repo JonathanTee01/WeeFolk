@@ -25,7 +25,7 @@ protected:
 	
 	// Timer to increment to track growth cycle
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Growth")
-	float GrowthTimer;
+	float GrowthTimer{ 0.0 };
 
 	// Length of a growth cycle
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Growth", meta = (ClampMin = "0.0", UIMin = "0.0"))
@@ -33,7 +33,7 @@ protected:
 
 	// Bool to track whether the plant has grown
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Growth")
-	bool isFullyGrown;
+	bool isFullyGrown{ false };
 
 	// Non-blueprinted function to grow the plant
 	void Growth();
@@ -46,25 +46,41 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Scale", meta = (ClampMin = "0.1", UIMin = "0.0"))
 	FVector2f scaleBetween{ 1.0,1.0 };
 
+	// Value chosen for scale
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Scale")
+	float scaleMultiplier;
+
 	// Bool to scale in only Z
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Scale")
 	bool scaleOnlyInZ;
 
 	// Float of current actor scale
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Scale")
-	float currentScale;
+	float currentScale{ 0 };
 
-	// Z offset of actor when placed
+	/////////////
+	//PLACEMENT//
+	/////////////
+
+	// Z rotation enabled boolean
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement")
 	bool ZRotationEnabled{ true };
 
+	// Z rotation generated
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Placement")
+	float ZRotation;
+
 	// Z offset of actor upon placement
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement")
-	float ZOffset;
+	float ZOffset{ 0 };
 
 	// Tilt range on placement
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement", meta = (ClampMin = "0.0", UIMin="0.0"))
 	FVector2f tiltRange{ 0.0,0.0 };
+
+	// Bool to inherit normal from landscape
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement")
+	bool inheritUpFromLand{ false };
 
 	//////////
 	//SPREAD//
