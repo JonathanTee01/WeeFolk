@@ -20,27 +20,35 @@ protected:
 	virtual void BeginPlay() override;
 
 	// Timer to increment to track growth cycle
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Growth")
 	float GrowthTimer;
 
 	// Length of a growth cycle
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timers")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Growth", meta = (ClampMin = "0.0", UIMin = "0.0"))
 	float GrowthCycleLength = 10;
 
+	// Bool to scale in only Z
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Growth")
+	bool scaleOnlyInZ;
+
 	// Bool to track whether the plant has grown
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Timers")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Growth")
 	bool isFullyGrown;
 
 	// Number of cycles required before a plant can try to spread
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
 	int32 MiniumCyclesPerSpread;
 
 	// StaticMesh for the plant to use
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
 	UStaticMeshComponent* VisualComponent;
 
+	// Values to scale between at max growth
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Growth", meta = (ClampMin = "0.1", UIMin= "0.0"))
+	FVector2f scaleBetween;
+
 	// Float of current actor scale
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Timers")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Growth")
 	float currentScale;
 
 	// Counter for number of cycles passed since last growth/spread
