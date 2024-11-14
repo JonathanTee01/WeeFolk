@@ -27,18 +27,30 @@ void APlantParent::BeginPlay()
 	// Generate randome scale based on planet
 	scaleMultiplier = FMath::FRandRange(scaleBetween.X, scaleBetween.Y);
 
+	// TODO: IF SET INHERIT UP FROM LAND NORMAL
+
+
+	// Apply the Z offset
+	VisualComponent->AddRelativeLocation({ 0.0, 0.0, ZOffset });
+
+	// Get the current default rotator
+	FRotator rotator = VisualComponent->K2_GetComponentRotation();
+
+	// Get a random tilt within range
+	float randomTilt = FMath::FRandRange(tiltRange.X, tiltRange.Y);
+	rotator.Pitch += randomTilt;
+
 	// If enabled find a Z rotation and apply it
 	if (ZRotationEnabled)
 	{
 		ZRotation = FMath::FRandRange(0.0, 360.0);
-		// TODO: APPLY ROTATION
+
+		// Increase and apply the new yaw
+		rotator.Yaw += ZRotation;
 	}
 
-	// TODO: GENERATE AND APPLY TILT
-
-	// TODO: APPLY Z OFFSET
-
-	// TODO: IF SET INHERIT UP FROM LAND NORMAL
+	// Apply tilt and z rotation
+	VisualComponent->SetRelativeRotation(rotator);
 }
 
 // Called every frame
@@ -59,7 +71,15 @@ void APlantParent::IncrementGrowthTimer(const float deltaTime, float& timer)
 	if (!isFullyGrown)
 	{
 		currentScale += (deltaTime / GrowthCycleLength) * scaleMultiplier;
-		VisualComponent->SetRelativeScale3D(FVector(currentScale, currentScale, currentScale));
+
+		if (!scaleOnlyInZ) 
+		{
+			VisualComponent->SetRelativeScale3D(FVector(currentScale, currentScale, currentScale));
+		}
+		else
+		{
+			VisualComponent->SetRelativeScale3D(FVector(scaleMultiplier, scaleMultiplier, currentScale));
+		}
 	}
 
 	// If due growth grow
