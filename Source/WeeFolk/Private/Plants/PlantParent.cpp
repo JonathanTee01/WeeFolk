@@ -28,7 +28,7 @@ void APlantParent::BeginPlay()
 	scaleMultiplier = FMath::FRandRange(scaleBetween.X, scaleBetween.Y);
 
 	// TODO: IF SET INHERIT UP FROM LAND NORMAL
-
+	FHitResult Hit;
 
 	// Apply the Z offset
 	VisualComponent->AddRelativeLocation({ 0.0, 0.0, ZOffset });
