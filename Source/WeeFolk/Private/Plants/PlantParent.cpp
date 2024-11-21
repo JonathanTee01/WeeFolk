@@ -27,32 +27,6 @@ void APlantParent::BeginPlay()
 	// Generate randome scale based on planet
 	scaleMultiplier = FMath::FRandRange(scaleBetween.X, scaleBetween.Y);
 
-	if (inheritUpFromLand)
-	{
-		FHitResult HitResult;
-
-		// Create positions to raycast along from a little above origin to a little below
-		FVector DownVector = FVector::DownVector * 1000;
-		FVector Start = GetActorLocation() + (FVector::UpVector * 500);
-		FVector End = Start + DownVector;
-	
-		// Ignore this actor in raycast
-		FCollisionQueryParams CollisionParams;
-		CollisionParams.AddIgnoredActor(this);
-
-		GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
-
-		// Get vector between normal and up. This is what we rotate with
-		FVector LandNormal = HitResult.ImpactNormal + FVector::UpVector;
-		LandNormal.Normalize();
-
-		// Make a rotator from normal and right vector
-		FRotator LandNormalRotation = FRotationMatrix::MakeFromZY(LandNormal, FVector::RightVector).Rotator();
-
-		// Set world rotation
-		VisualComponent->SetWorldRotation(LandNormalRotation);
-	}
-
 	// Apply the Z offset
 	VisualComponent->AddRelativeLocation({ 0.0, 0.0, ZOffset });
 
@@ -74,6 +48,32 @@ void APlantParent::BeginPlay()
 
 	// Apply tilt and z rotation
 	VisualComponent->SetRelativeRotation(rotator);
+
+	if (inheritUpFromLand)
+	{
+		FHitResult HitResult;
+
+		// Create positions to raycast along from a little above origin to a little below
+		FVector DownVector = FVector::DownVector * 1000;
+		FVector Start = GetActorLocation() + (FVector::UpVector * 500);
+		FVector End = Start + DownVector;
+	
+		// Ignore this actor in raycast
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);
+
+		GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+
+		// Get vector between normal and up. This is what we rotate with
+		FVector LandNormal = (HitResult.ImpactNormal * lerpTowardsNormal) + (FVector::UpVector * (1 - lerpTowardsNormal));
+		LandNormal.Normalize();
+
+		// Make a rotator from normal and right vector
+		FRotator LandNormalRotation = FRotationMatrix::MakeFromZY(LandNormal, FVector::RightVector).Rotator();
+
+		// Set world rotation
+		VisualComponent->AddWorldRotation(LandNormalRotation);
+	}
 }
 
 // Called every frame
