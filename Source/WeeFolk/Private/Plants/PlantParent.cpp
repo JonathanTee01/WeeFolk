@@ -24,56 +24,7 @@ void APlantParent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Generate randome scale based on planet
-	scaleMultiplier = FMath::FRandRange(scaleBetween.X, scaleBetween.Y);
-
-	// Apply the Z offset
-	VisualComponent->AddRelativeLocation({ 0.0, 0.0, ZOffset });
-
-	// Get the current default rotator
-	FRotator rotator = VisualComponent->K2_GetComponentRotation();
-
-	// Get a random tilt within range
-	float randomTilt = FMath::FRandRange(tiltRange.X, tiltRange.Y);
-	rotator.Pitch += randomTilt;
-
-	// If enabled find a Z rotation and apply it
-	if (ZRotationEnabled)
-	{
-		ZRotation = FMath::FRandRange(0.0, 360.0);
-
-		// Increase and apply the new yaw
-		rotator.Yaw += ZRotation;
-	}
-
-	// Apply tilt and z rotation
-	VisualComponent->SetRelativeRotation(rotator);
-
-	if (inheritUpFromLand)
-	{
-		FHitResult HitResult;
-
-		// Create positions to raycast along from a little above origin to a little below
-		FVector DownVector = FVector::DownVector * 1000;
-		FVector Start = GetActorLocation() + (FVector::UpVector * 500);
-		FVector End = Start + DownVector;
-	
-		// Ignore this actor in raycast
-		FCollisionQueryParams CollisionParams;
-		CollisionParams.AddIgnoredActor(this);
-
-		GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
-
-		// Get vector between normal and up. This is what we rotate with
-		FVector LandNormal = (HitResult.ImpactNormal * lerpTowardsNormal) + (FVector::UpVector * (1 - lerpTowardsNormal));
-		LandNormal.Normalize();
-
-		// Make a rotator from normal and right vector
-		FRotator LandNormalRotation = FRotationMatrix::MakeFromZY(LandNormal, FVector::RightVector).Rotator();
-
-		// Set world rotation
-		VisualComponent->AddWorldRotation(LandNormalRotation);
-	}
+	initPlacement();
 }
 
 // Called every frame
@@ -126,4 +77,60 @@ void APlantParent::Growth()
 
 void APlantParent::Spread()
 {
+
+}
+
+
+void APlantParent::initPlacement() 
+{
+	// Generate randome scale based on planet
+	scaleMultiplier = FMath::FRandRange(scaleBetween.X, scaleBetween.Y);
+
+	// Apply the Z offset
+	VisualComponent->AddRelativeLocation({ 0.0, 0.0, ZOffset });
+
+	// Get the current default rotator
+	FRotator rotator = VisualComponent->K2_GetComponentRotation();
+
+	// Get a random tilt within range
+	float randomTilt = FMath::FRandRange(tiltRange.X, tiltRange.Y);
+	rotator.Pitch += randomTilt;
+
+	// If enabled find a Z rotation and apply it
+	if (ZRotationEnabled)
+	{
+		ZRotation = FMath::FRandRange(0.0, 360.0);
+
+		// Increase and apply the new yaw
+		rotator.Yaw += ZRotation;
+	}
+
+	// Apply tilt and z rotation
+	VisualComponent->SetRelativeRotation(rotator);
+
+	if (inheritUpFromLand)
+	{
+		FHitResult HitResult;
+
+		// Create positions to raycast along from a little above origin to a little below
+		FVector DownVector = FVector::DownVector * 1000;
+		FVector Start = GetActorLocation() + (FVector::UpVector * 500);
+		FVector End = Start + DownVector;
+
+		// Ignore this actor in raycast
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this);
+
+		GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+
+		// Get vector between normal and up. This is what we rotate with
+		FVector LandNormal = (HitResult.ImpactNormal * lerpTowardsNormal) + (FVector::UpVector * (1 - lerpTowardsNormal));
+		LandNormal.Normalize();
+
+		// Make a rotator from normal and right vector
+		FRotator LandNormalRotation = FRotationMatrix::MakeFromZY(LandNormal, FVector::RightVector).Rotator();
+
+		// Set world rotation
+		VisualComponent->AddWorldRotation(LandNormalRotation);
+	}
 }
