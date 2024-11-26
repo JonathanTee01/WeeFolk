@@ -77,7 +77,11 @@ void APlantParent::Growth()
 
 void APlantParent::Spread()
 {
+	// TODO : Line trace from random nearby within range
 
+	// TODO : From trace if viable create new plant of same type
+
+	// TODO : If not viable check again to a limit then prevent future spread
 }
 
 
