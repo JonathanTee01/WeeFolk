@@ -82,6 +82,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement")
 	bool inheritUpFromLand{ false };
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement", meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+	float lerpTowardsNormal{ 0.5 };
+
 	//////////
 	//SPREAD//
 	//////////
