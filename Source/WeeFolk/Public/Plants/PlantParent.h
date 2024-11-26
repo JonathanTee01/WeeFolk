@@ -95,15 +95,24 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
 	int32 MiniumCyclesPerSpread;
 
-	// StaticMesh for the plant to use
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
-	UStaticMeshComponent* VisualComponent;
+	// Radius to spread within
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
+	int32 SpreadRadius;
+
+	// Class to spawn on spread
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
+	TSubclassOf<APlantParent> ClassToSpread;
 
 	// Counter for number of cycles passed since last growth/spread
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
 	int32 cycleCounter;
 
 	// Function to spread a plant to adjacent spaces
 	virtual void Spread();
+
+	// StaticMesh for the plant to use
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
+	UStaticMeshComponent* VisualComponent;
 
 public:	
 	// Called every frame

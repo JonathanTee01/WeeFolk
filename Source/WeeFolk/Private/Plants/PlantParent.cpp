@@ -15,8 +15,6 @@ APlantParent::APlantParent()
 	{
 		SetRootComponent(VisualComponent);
 	}
-
-	
 }
 
 // Called when the game starts or when spawned
@@ -72,16 +70,41 @@ void APlantParent::Growth()
 	// Set isGrown to be true
 	isFullyGrown = true;
 
-	// TODO : Add if for spreading
+	if (cycleCounter >= MiniumCyclesPerSpread)
+	{
+		Spread();
+		cycleCounter = 0;
+	}
 }
 
 void APlantParent::Spread()
 {
-	// TODO : Line trace from random nearby within range
+	// Create a 2D vector for the direction to spread in
+	FVector spreadDirection{ FMath::FRandRange(-1.0,1.0), FMath::FRandRange(-1.0,1.0), 0.0f};
+	spreadDirection.Normalize();
+
+	// Raycast down to find a valid placement
+	FHitResult HitResult;
+
+	// Create positions to raycast along from a little above origin to a little below at a set radius away
+	FVector DownVector = FVector::DownVector * 5000;
+	FVector Start = GetActorLocation() + (FVector::UpVector * 1000) + (spreadDirection * (FMath::FRandRange(0.0, SpreadRadius)));
+	FVector End = Start + DownVector;
+
+	// Cast a ray to check for spawn location
+	FCollisionQueryParams CollisionParams;
+	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams); 
 
 	// TODO : From trace if viable create new plant of same type
+	if (!HitResult.GetActor()->ActorHasTag("Non-spreadable"))
+	{
+		FActorSpawnParameters SpawnInfo;
+		FRotator myRot(0, 0, 0);
+		FVector myLoc = HitResult.Location;
 
-	// TODO : If not viable check again to a limit then prevent future spread
+		//GetWorld()->SpawnActor<APlantParent>(myLoc, myRot, SpawnInfo); 
+		GetWorld()->SpawnActor<APlantParent>(ClassToSpread, myLoc, myRot, SpawnInfo);
+	}
 }
 
 
