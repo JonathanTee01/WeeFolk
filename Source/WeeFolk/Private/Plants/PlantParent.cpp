@@ -15,8 +15,6 @@ APlantParent::APlantParent()
 	{
 		SetRootComponent(VisualComponent);
 	}
-
-	
 }
 
 // Called when the game starts or when spawned
@@ -66,18 +64,49 @@ void APlantParent::Growth()
 	// TODO : Add if for using soil quality
 
 	// Reduce the growth timer and increment the number of cycles
-	GrowthTimer -= GrowthCycleLength;
+	GrowthTimer -= GrowthCycleLength * FMath::FRandRange(0.8, 1.2);
 	cycleCounter++;
 
 	// Set isGrown to be true
 	isFullyGrown = true;
 
-	// TODO : Add if for spreading
+	if (cycleCounter >= MiniumCyclesPerSpread)
+	{
+		if (FMath::RandRange(0, 100) < SpreadChance)
+		{
+			Spread();
+			cycleCounter = 0;
+		}
+	}
 }
 
 void APlantParent::Spread()
 {
+	// Create a 2D vector for the direction to spread in
+	FVector spreadDirection{ FMath::FRandRange(-1.0,1.0), FMath::FRandRange(-1.0,1.0), 0.0f};
+	spreadDirection.Normalize();
 
+	// Raycast down to find a valid placement
+	FHitResult HitResult;
+
+	// Create positions to raycast along from a little above origin to a little below at a set radius away
+	FVector DownVector = FVector::DownVector * 5000;
+	FVector Start = GetActorLocation() + (FVector::UpVector * 1000) + (spreadDirection * (FMath::FRandRange(0.0, FMath::FRandRange(SpreadRadius.X, SpreadRadius.Y))));
+	FVector End = Start + DownVector;
+
+	// Cast a ray to check for spawn location
+	FCollisionQueryParams CollisionParams;
+	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams); 
+
+	// TODO : From trace if viable create new plant of same type
+	if (!HitResult.GetActor()->ActorHasTag("Non-spreadable"))
+	{
+		FActorSpawnParameters SpawnInfo;
+		FRotator myRot(0, 0, 0);
+		FVector myLoc = HitResult.Location;
+
+		GetWorld()->SpawnActor<APlantParent>(ClassToSpread, myLoc, myRot, SpawnInfo);
+	}
 }
 
 
