@@ -96,8 +96,14 @@ protected:
 	int32 MiniumCyclesPerSpread;
 
 	// Radius to spread within
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
-	int32 SpreadRadius;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread", meta = (ClampMin = "0", UIMin = "0"))
+	FVector2f SpreadRadius;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread", meta = (ClampMin = "0", ClampMax = "100", UIMin="0", UIMax="100"))
+	int32 SpreadChance;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
+	bool CanSpread;
 
 	// Class to spawn on spread
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
@@ -109,6 +115,10 @@ protected:
 
 	// Function to spread a plant to adjacent spaces
 	virtual void Spread();
+
+	//////////
+	//Visual//
+	//////////
 
 	// StaticMesh for the plant to use
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")

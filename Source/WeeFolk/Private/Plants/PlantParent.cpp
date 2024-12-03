@@ -64,7 +64,7 @@ void APlantParent::Growth()
 	// TODO : Add if for using soil quality
 
 	// Reduce the growth timer and increment the number of cycles
-	GrowthTimer -= GrowthCycleLength;
+	GrowthTimer -= GrowthCycleLength * FMath::FRandRange(0.8, 1.2);
 	cycleCounter++;
 
 	// Set isGrown to be true
@@ -72,8 +72,11 @@ void APlantParent::Growth()
 
 	if (cycleCounter >= MiniumCyclesPerSpread)
 	{
-		Spread();
-		cycleCounter = 0;
+		if (FMath::RandRange(0, 100) < SpreadChance)
+		{
+			Spread();
+			cycleCounter = 0;
+		}
 	}
 }
 
@@ -88,7 +91,7 @@ void APlantParent::Spread()
 
 	// Create positions to raycast along from a little above origin to a little below at a set radius away
 	FVector DownVector = FVector::DownVector * 5000;
-	FVector Start = GetActorLocation() + (FVector::UpVector * 1000) + (spreadDirection * (FMath::FRandRange(0.0, SpreadRadius)));
+	FVector Start = GetActorLocation() + (FVector::UpVector * 1000) + (spreadDirection * (FMath::FRandRange(0.0, FMath::FRandRange(SpreadRadius.X, SpreadRadius.Y))));
 	FVector End = Start + DownVector;
 
 	// Cast a ray to check for spawn location
@@ -102,7 +105,6 @@ void APlantParent::Spread()
 		FRotator myRot(0, 0, 0);
 		FVector myLoc = HitResult.Location;
 
-		//GetWorld()->SpawnActor<APlantParent>(myLoc, myRot, SpawnInfo); 
 		GetWorld()->SpawnActor<APlantParent>(ClassToSpread, myLoc, myRot, SpawnInfo);
 	}
 }
