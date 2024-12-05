@@ -12,6 +12,7 @@ struct FGridBox
 {
 	GENERATED_USTRUCT_BODY()
 
+	TMap< TSubclassOf<APlantParent>, TArray< TSubclassOf<APlantParent>* > > containedEntities; 
 };
 
 UCLASS()
@@ -27,6 +28,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Map storing each grid box of entities
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Instancing")
 	TMap<FVector2f, FGridBox> EntityGrid;
 
@@ -34,15 +36,20 @@ public:
 	///////////
 	//Sorting//
 	///////////
+
+	// Size of each grid box
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Limits", meta = (ClampMin = "100", UIMin = "100"))
-	int32 PlotSize = 100;
+	int32 PlotSize = 500;
 
 	////////////
 	//Spawning//
 	////////////
+
+	// Max number of entity type allowed in each grid box
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instancing|Limits")
 	TMap< TSubclassOf<APlantParent>, int32 > SpreadingMax;
 
+	// Function to validate and add newly spawned actors
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
 	bool AddToManager(AActor* actorToAdd, FVector2f position);
 

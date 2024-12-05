@@ -25,7 +25,15 @@ void APlantManager::Tick(float DeltaTime)
 
 }
 
+// Function to validate and add newly spawned actors
 bool APlantManager::AddToManager(AActor* actorToAdd, FVector2f position)
 {
-	return false;
+	FGridBox* EntryBox = &EntityGrid.FindOrAdd(position); 
+
+	if (EntryBox->containedEntities[actorToAdd->GetClass()].Num() > SpreadingMax[actorToAdd->GetClass()]) 
+	{
+		return false;
+	}
+
+	return true;
 }
