@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PlantParent.h"
 #include "PlantManager.generated.h"
 
 UCLASS()
@@ -20,6 +21,18 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	///////////
+	//Sorting//
+	///////////
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Limits", meta = (ClampMin = "100", UIMin = "100"))
+	int32 PlotSize = 100;
+
+	////////////
+	//Spawning//
+	////////////
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instancing|Limits")
+	TMap< TSubclassOf<APlantParent>, int32 > SpreadingMax;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
