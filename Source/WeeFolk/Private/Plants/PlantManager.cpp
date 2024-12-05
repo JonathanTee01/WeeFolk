@@ -25,3 +25,7 @@ void APlantManager::Tick(float DeltaTime)
 
 }
 
+bool APlantManager::AddToManager(AActor* actorToAdd, FVector2f position)
+{
+	return false;
+}
