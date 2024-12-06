@@ -28,7 +28,7 @@ void APlantManager::Tick(float DeltaTime)
 // Function to validate and add newly spawned actors
 bool APlantManager::AddToManager(AActor* actorToAdd, FVector2f position)
 {
-	FGridBox* EntryBox = &EntityGrid.FindOrAdd(position); 
+	FGridBox* EntryBox = &EntityGrid.FindOrAdd((position/PlotSize).RoundToVector()); 
 
 	if (EntryBox->containedEntities[actorToAdd->GetClass()].Num() > SpreadingMax[actorToAdd->GetClass()]) 
 	{

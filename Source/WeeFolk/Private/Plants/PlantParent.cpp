@@ -15,6 +15,7 @@ APlantParent::APlantParent()
 	{
 		SetRootComponent(VisualComponent);
 	}
+
 }
 
 // Called when the game starts or when spawned
@@ -23,6 +24,7 @@ void APlantParent::BeginPlay()
 	Super::BeginPlay();
 
 	initPlacement();
+	Manager = UGameplayStatics::GetActorOfClass(GetWorld(), ManagerClass);
 }
 
 // Called every frame
@@ -65,17 +67,17 @@ void APlantParent::Growth()
 
 	// Reduce the growth timer and increment the number of cycles
 	GrowthTimer -= GrowthCycleLength * FMath::FRandRange(0.8, 1.2);
-	cycleCounter++;
+	CycleCounter++;
 
 	// Set isGrown to be true
 	isFullyGrown = true;
 
-	if (cycleCounter >= MiniumCyclesPerSpread)
+	if (CycleCounter >= MiniumCyclesPerSpread)
 	{
 		if (FMath::RandRange(0, 100) < SpreadChance)
 		{
 			Spread();
-			cycleCounter = 0;
+			CycleCounter = 0;
 		}
 	}
 }
