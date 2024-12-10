@@ -16,6 +16,17 @@ void APlantManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	TArray<AActor*> plants;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlantParent::StaticClass(), plants);
+
+	if (plants.Num() > 0) 
+	{
+		for (int i = 0; i < plants.Num(); i++)
+		{
+			if (plants[i] != nullptr)
+				AddToManager(plants[i], plants[i]->GetActorLocation());
+		}
+	}
 }
 
 // Called every frame
@@ -26,14 +37,17 @@ void APlantManager::Tick(float DeltaTime)
 }
 
 // Function to validate and add newly spawned actors
-bool APlantManager::AddToManager(AActor* actorToAdd, FVector2f position)
+bool APlantManager::AddToManager(AActor* actorToAdd, FVector position)
 {
-	FGridBox* EntryBox = &EntityGrid.FindOrAdd((position/PlotSize).RoundToVector()); 
+	FVector2f pos = { (float)position.X, (float)position.Y };
+	pos = (pos / PlotSize).RoundToVector();
 
-	if (EntryBox->containedEntities[actorToAdd->GetClass()].Num() > SpreadingMax[actorToAdd->GetClass()]) 
+	if (EntityGrid.FindOrAdd(pos).containedEntities.FindOrAdd(actorToAdd->GetClass()->GetName()).Num() >= SpreadingMax[actorToAdd->GetClass()])
 	{
+		actorToAdd->Destroy();
 		return false;
 	}
 
+	EntityGrid[pos].containedEntities[actorToAdd->GetClass()->GetName()].Add(actorToAdd);
 	return true;
 }

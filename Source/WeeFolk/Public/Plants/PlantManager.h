@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "PlantParent.h"
+#include <Kismet/GameplayStatics.h>
+#include "GameFramework/Actor.h"
 #include "PlantManager.generated.h"
 
 USTRUCT(BlueprintType)
@@ -12,7 +13,7 @@ struct FGridBox
 {
 	GENERATED_USTRUCT_BODY()
 
-	TMap< TSubclassOf<APlantParent>, TArray< TSubclassOf<APlantParent>* > > containedEntities; 
+	TMap< FString, TArray< AActor* > > containedEntities;
 };
 
 UCLASS()
@@ -51,7 +52,7 @@ public:
 
 	// Function to validate and add newly spawned actors
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
-	bool AddToManager(AActor* actorToAdd, FVector2f position);
+	bool AddToManager(AActor* actorToAdd, FVector position);
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

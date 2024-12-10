@@ -24,7 +24,7 @@ void APlantParent::BeginPlay()
 	Super::BeginPlay();
 
 	initPlacement();
-	Manager = UGameplayStatics::GetActorOfClass(GetWorld(), ManagerClass);
+	
 }
 
 // Called every frame
@@ -82,7 +82,7 @@ void APlantParent::Growth()
 	}
 }
 
-void APlantParent::Spread()
+APlantParent* APlantParent::Spread()
 {
 	// Create a 2D vector for the direction to spread in
 	FVector spreadDirection{ FMath::FRandRange(-1.0,1.0), FMath::FRandRange(-1.0,1.0), 0.0f};
@@ -107,8 +107,10 @@ void APlantParent::Spread()
 		FRotator myRot(0, 0, 0);
 		FVector myLoc = HitResult.Location;
 
-		GetWorld()->SpawnActor<APlantParent>(ClassToSpread, myLoc, myRot, SpawnInfo);
+		return GetWorld()->SpawnActor<APlantParent>(ClassToSpread, myLoc, myRot, SpawnInfo);
 	}
+
+	return nullptr;
 }
 
 

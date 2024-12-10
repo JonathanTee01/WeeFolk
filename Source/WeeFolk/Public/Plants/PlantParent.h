@@ -114,14 +114,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
 	int32 CycleCounter;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
-	TSubclassOf<AActor> ManagerClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
-	AActor* Manager;
-
 	// Function to spread a plant to adjacent spaces
-	virtual void Spread();
+	virtual APlantParent* Spread();
 
 	//////////
 	//Visual//
