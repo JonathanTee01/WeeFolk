@@ -13,7 +13,7 @@ struct FGridBox
 {
 	GENERATED_USTRUCT_BODY()
 
-	TMap< FString, TArray< AActor* > > containedEntities;
+	TMap< FString, TArray< APlantParent* > > containedEntities;
 };
 
 UCLASS()
@@ -52,7 +52,16 @@ public:
 
 	// Function to validate and add newly spawned actors
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
-	bool AddToManager(AActor* actorToAdd, FVector position);
+	bool AddToManager(APlantParent* actorToAdd, const FVector position);
+
+	//////////
+	//Timers//
+	//////////
+	// 
+	// Function to increment plant timers
+	UFUNCTION(BlueprintCallable, Category = "Timers")
+	bool IncrementTimers(const float deltaTime);
+
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

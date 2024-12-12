@@ -16,17 +16,34 @@ void APlantManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Get the already existing plants
+	// THIS IS FOR DEBUG AND CAN BE DELETED
 	TArray<AActor*> plants;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlantParent::StaticClass(), plants);
 
-	if (plants.Num() > 0) 
+	// Find all plants present on start-up
+	for (int i = 0; i < plants.Num(); i++)
 	{
-		for (int i = 0; i < plants.Num(); i++)
+		if (plants[i] != nullptr)
+			AddToManager((APlantParent*)plants[i], plants[i]->GetActorLocation());
+	}
+}
+
+// Function to increment plant timers
+bool APlantManager::IncrementTimers(const float deltaTime)
+{
+	for (auto& Box : EntityGrid)
+	{
+		for (auto& Entities : Box.Value.containedEntities)
 		{
-			if (plants[i] != nullptr)
-				AddToManager(plants[i], plants[i]->GetActorLocation());
+			for (int i = 0; i < Entities.Value.Num(); i++)
+			{
+				if (Entities.Value[i]->ShouldGrow())
+					Entities.Value[i]->IncrementGrowthTimer(deltaTime);
+			}
 		}
 	}
+	return false;
 }
 
 // Called every frame
@@ -37,17 +54,20 @@ void APlantManager::Tick(float DeltaTime)
 }
 
 // Function to validate and add newly spawned actors
-bool APlantManager::AddToManager(AActor* actorToAdd, FVector position)
+bool APlantManager::AddToManager(APlantParent* actorToAdd, const FVector position)
 {
+	// Turn pos into correct format for key values
 	FVector2f pos = { (float)position.X, (float)position.Y };
 	pos = (pos / PlotSize).RoundToVector();
 
+	// Create the maps if needed and verify whether the new actor would exceed set limits within the grid space
 	if (EntityGrid.FindOrAdd(pos).containedEntities.FindOrAdd(actorToAdd->GetClass()->GetName()).Num() >= SpreadingMax[actorToAdd->GetClass()])
 	{
 		actorToAdd->Destroy();
 		return false;
 	}
 
+	// If the actor would not exceed limits then store a reference
 	EntityGrid[pos].containedEntities[actorToAdd->GetClass()->GetName()].Add(actorToAdd);
 	return true;
 }

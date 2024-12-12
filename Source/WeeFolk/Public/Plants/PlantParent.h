@@ -131,8 +131,10 @@ public:
 
 	/**Increments the timer tracking growth
 	* @param DeltaTime The time passed since last incremented
-	* @param timer The GrowthTimer's value after being updated
 	*/
 	UFUNCTION(BlueprintCallable, Category = "Timers")
-	void IncrementGrowthTimer(const float DeltaTime, float& timer);
+	void IncrementGrowthTimer(const float DeltaTime);
+
+	// Boolean function to check whether the plant shoudl be grown
+	bool ShouldGrow();
 };

@@ -35,11 +35,10 @@ void APlantParent::Tick(float DeltaTime)
 	
 }
 
-void APlantParent::IncrementGrowthTimer(const float deltaTime, float& timer)
+void APlantParent::IncrementGrowthTimer(const float deltaTime)
 {
 	// Incremtent the timer and output new value
 	GrowthTimer += deltaTime;
-	timer = GrowthTimer;
 
 	// If not fully grown
 	if (!isFullyGrown)
@@ -59,6 +58,11 @@ void APlantParent::IncrementGrowthTimer(const float deltaTime, float& timer)
 	// If due growth grow
 	if (GrowthTimer >= GrowthCycleLength)
 		Growth();
+}
+
+bool APlantParent::ShouldGrow()
+{
+	return (!isFullyGrown || CanSpread);
 }
 
 void APlantParent::Growth()
