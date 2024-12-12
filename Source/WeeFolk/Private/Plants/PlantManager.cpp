@@ -25,7 +25,7 @@ void APlantManager::BeginPlay()
 	for (int i = 0; i < plants.Num(); i++)
 	{
 		if (plants[i] != nullptr)
-			AddToManager((APlantParent*)plants[i], plants[i]->GetActorLocation());
+			AddToManager((APlantParent*)plants[i]);
 	}
 }
 
@@ -39,7 +39,12 @@ bool APlantManager::IncrementTimers(const float deltaTime)
 			for (int i = 0; i < Entities.Value.Num(); i++)
 			{
 				if (Entities.Value[i]->ShouldGrow())
+				{
 					Entities.Value[i]->IncrementGrowthTimer(deltaTime);
+					if (Entities.Value[i]->GetShouldSpread())
+						if (AddToManager(Entities.Value[i]->Spread()))
+							Entities.Value[i]->SetShouldSpread(false);
+				}
 			}
 		}
 	}
@@ -54,20 +59,26 @@ void APlantManager::Tick(float DeltaTime)
 }
 
 // Function to validate and add newly spawned actors
-bool APlantManager::AddToManager(APlantParent* actorToAdd, const FVector position)
+bool APlantManager::AddToManager(APlantParent* actorToAdd)
 {
+	if (actorToAdd == nullptr)
+		return false;
+
+	// Get actors location in world space
+	FVector actorPos = actorToAdd->GetActorLocation();
+
 	// Turn pos into correct format for key values
-	FVector2f pos = { (float)position.X, (float)position.Y };
-	pos = (pos / PlotSize).RoundToVector();
+	FVector2f gridPos = { (float)actorPos.X, (float)actorPos.Y };
+	gridPos = (gridPos / PlotSize).RoundToVector();
 
 	// Create the maps if needed and verify whether the new actor would exceed set limits within the grid space
-	if (EntityGrid.FindOrAdd(pos).containedEntities.FindOrAdd(actorToAdd->GetClass()->GetName()).Num() >= SpreadingMax[actorToAdd->GetClass()])
+	if (EntityGrid.FindOrAdd(gridPos).containedEntities.FindOrAdd(actorToAdd->GetClass()->GetName()).Num() >= SpreadingMax[actorToAdd->GetClass()])
 	{
 		actorToAdd->Destroy();
 		return false;
 	}
 
 	// If the actor would not exceed limits then store a reference
-	EntityGrid[pos].containedEntities[actorToAdd->GetClass()->GetName()].Add(actorToAdd);
+	EntityGrid[gridPos].containedEntities[actorToAdd->GetClass()->GetName()].Add(actorToAdd);
 	return true;
 }

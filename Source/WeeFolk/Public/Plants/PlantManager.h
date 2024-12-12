@@ -52,7 +52,7 @@ public:
 
 	// Function to validate and add newly spawned actors
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
-	bool AddToManager(APlantParent* actorToAdd, const FVector position);
+	bool AddToManager(APlantParent* actorToAdd);
 
 	//////////
 	//Timers//

@@ -114,8 +114,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
 	int32 CycleCounter;
 
-	// Function to spread a plant to adjacent spaces
-	virtual APlantParent* Spread();
+	// Variable to flag that it should spread
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
+	bool ShouldSpread;
 
 	//////////
 	//Visual//
@@ -137,4 +138,11 @@ public:
 
 	// Boolean function to check whether the plant shoudl be grown
 	bool ShouldGrow();
+
+	bool GetShouldSpread();
+
+	void SetShouldSpread(bool val);
+
+	// Function to spread a plant to adjacent spaces
+	virtual APlantParent* Spread();
 };

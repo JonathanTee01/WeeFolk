@@ -8,12 +8,13 @@ APlantParent::APlantParent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	VisualComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Default Mesh"));
 
 	if (VisualComponent)
 	{
-		SetRootComponent(VisualComponent);
+		VisualComponent->SetRelativeScale3D(FVector::Zero()); 
+		SetRootComponent(VisualComponent); 
 	}
 
 }
@@ -65,6 +66,16 @@ bool APlantParent::ShouldGrow()
 	return (!isFullyGrown || CanSpread);
 }
 
+bool APlantParent::GetShouldSpread()
+{
+	return ShouldSpread;
+}
+
+void APlantParent::SetShouldSpread(bool val)
+{
+	ShouldSpread = val;
+}
+
 void APlantParent::Growth()
 {
 	// TODO : Add if for using soil quality
@@ -80,7 +91,7 @@ void APlantParent::Growth()
 	{
 		if (FMath::RandRange(0, 100) < SpreadChance)
 		{
-			Spread();
+			ShouldSpread = true;
 			CycleCounter = 0;
 		}
 	}
@@ -104,16 +115,20 @@ APlantParent* APlantParent::Spread()
 	FCollisionQueryParams CollisionParams;
 	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams); 
 
-	// TODO : From trace if viable create new plant of same type
+	// From trace if viable create new plant of the given type
 	if (!HitResult.GetActor()->ActorHasTag("Non-spreadable"))
 	{
 		FActorSpawnParameters SpawnInfo;
 		FRotator myRot(0, 0, 0);
 		FVector myLoc = HitResult.Location;
 
+		ShouldSpread = false;
+
 		return GetWorld()->SpawnActor<APlantParent>(ClassToSpread, myLoc, myRot, SpawnInfo);
 	}
 
+	// TODO : Make condition more complex for not spreading
+	ShouldSpread = false;
 	return nullptr;
 }
 
