@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <Kismet/GameplayStatics.h>
 #include "PlantParent.generated.h"
 
 UCLASS()
@@ -111,10 +112,11 @@ protected:
 
 	// Counter for number of cycles passed since last growth/spread
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
-	int32 cycleCounter;
+	int32 CycleCounter;
 
-	// Function to spread a plant to adjacent spaces
-	virtual void Spread();
+	// Variable to flag that it should spread
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
+	bool ShouldSpread;
 
 	//////////
 	//Visual//
@@ -130,8 +132,17 @@ public:
 
 	/**Increments the timer tracking growth
 	* @param DeltaTime The time passed since last incremented
-	* @param timer The GrowthTimer's value after being updated
 	*/
 	UFUNCTION(BlueprintCallable, Category = "Timers")
-	void IncrementGrowthTimer(const float DeltaTime, float& timer);
+	void IncrementGrowthTimer(const float DeltaTime);
+
+	// Boolean function to check whether the plant shoudl be grown
+	bool ShouldGrow();
+
+	bool GetShouldSpread();
+
+	void SetShouldSpread(bool val);
+
+	// Function to spread a plant to adjacent spaces
+	virtual APlantParent* Spread();
 };
