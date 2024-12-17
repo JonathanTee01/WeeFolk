@@ -94,7 +94,7 @@ protected:
 
 	// Number of cycles required before a plant can try to spread
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
-	int32 MiniumCyclesPerSpread;
+	int32 MinimumCyclesPerSpread;
 
 	// Radius to spread within
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread", meta = (ClampMin = "0", UIMin = "0"))
