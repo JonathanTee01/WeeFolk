@@ -87,9 +87,10 @@ void APlantParent::Growth()
 	// Set isGrown to be true
 	isFullyGrown = true;
 
-	if (CycleCounter >= MiniumCyclesPerSpread)
+	if (CycleCounter >= MinimumCyclesPerSpread)
 	{
-		if (FMath::RandRange(0, 100) < SpreadChance)
+		// Scale chance up as cycles exceed the minimum 
+		if (FMath::RandRange(0, 100) < SpreadChance + ((CycleCounter - MinimumCyclesPerSpread)*(SpreadChance/MinimumCyclesPerSpread)))
 		{
 			ShouldSpread = true;
 			CycleCounter = 0;
