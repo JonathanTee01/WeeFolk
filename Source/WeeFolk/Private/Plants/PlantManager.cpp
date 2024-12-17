@@ -71,8 +71,11 @@ bool APlantManager::AddToManager(APlantParent* actorToAdd)
 	FVector2f gridPos = { (float)actorPos.X, (float)actorPos.Y };
 	gridPos = (gridPos / PlotSize).RoundToVector();
 
+	EntityGrid.FindOrAdd(gridPos);
+	EntityGrid.FindOrAdd(gridPos).containedEntities.FindOrAdd(actorToAdd->GetClass()->GetName());
+
 	// Create the maps if needed and verify whether the new actor would exceed set limits within the grid space
-	if (EntityGrid.FindOrAdd(gridPos).containedEntities.FindOrAdd(actorToAdd->GetClass()->GetName()).Num() >= SpreadingMax[actorToAdd->GetClass()])
+	if (EntityGrid.FindOrAdd(gridPos).containedEntities.FindOrAdd(actorToAdd->GetClass()->GetName()).Num() >= SpreadingMax.FindOrAdd(actorToAdd->GetClass()))
 	{
 		actorToAdd->Destroy();
 		return false;
