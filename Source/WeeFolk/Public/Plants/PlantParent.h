@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <Kismet/GameplayStatics.h>
 #include "PlantParent.generated.h"
 
 UCLASS()
@@ -85,23 +86,45 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Placement", meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
 	float lerpTowardsNormal{ 0.5 };
 
+	void initPlacement();
+
 	//////////
 	//SPREAD//
 	//////////
 
 	// Number of cycles required before a plant can try to spread
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
-	int32 MiniumCyclesPerSpread;
+	int32 MinimumCyclesPerSpread;
+
+	// Radius to spread within
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread", meta = (ClampMin = "0", UIMin = "0"))
+	FVector2f SpreadRadius;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread", meta = (ClampMin = "0", ClampMax = "100", UIMin="0", UIMax="100"))
+	int32 SpreadChance;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
+	bool CanSpread;
+
+	// Class to spawn on spread
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Instancing|Timers|Spread")
+	TSubclassOf<APlantParent> ClassToSpread;
+
+	// Counter for number of cycles passed since last growth/spread
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
+	int32 CycleCounter;
+
+	// Variable to flag that it should spread
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Instancing|Timers|Spread")
+	bool ShouldSpread;
+
+	//////////
+	//Visual//
+	//////////
 
 	// StaticMesh for the plant to use
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Visual Component")
 	UStaticMeshComponent* VisualComponent;
-
-	// Counter for number of cycles passed since last growth/spread
-	int32 cycleCounter;
-
-	// Function to spread a plant to adjacent spaces
-	virtual void Spread();
 
 public:	
 	// Called every frame
@@ -109,8 +132,17 @@ public:
 
 	/**Increments the timer tracking growth
 	* @param DeltaTime The time passed since last incremented
-	* @param timer The GrowthTimer's value after being updated
 	*/
 	UFUNCTION(BlueprintCallable, Category = "Timers")
-	void IncrementGrowthTimer(const float DeltaTime, float& timer);
+	void IncrementGrowthTimer(const float DeltaTime);
+
+	// Boolean function to check whether the plant shoudl be grown
+	bool ShouldGrow();
+
+	bool GetShouldSpread();
+
+	void SetShouldSpread(bool val);
+
+	// Function to spread a plant to adjacent spaces
+	virtual APlantParent* Spread();
 };
